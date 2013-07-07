@@ -1,0 +1,59 @@
+{
+	"games" : [
+		{
+			"parameters" : {
+				"title" : "Titre de la partie",
+				"status" : {
+					"status" : "asking",
+					"current_question" : 2
+				}
+			},
+			
+			"players" : [
+				{
+					"name" : "Alco",
+					"status" : "playing",
+					"score" : 1,
+					"answers" : [
+						{
+							"answer" : "Rémy",
+							"valid" : true,
+							"score" : 1,
+							"position" : -1
+						}
+					]
+				},
+				{
+					"name" : "Kewie",
+					"status" : "playing",
+					"score" : 1,
+					"answers" : [
+						{
+							"answer" : "Rémy",
+							"valid" : true,
+							"score" : 1,
+							"position" : -1
+						}
+					]
+				}
+			],
+			
+			"questions" : [
+				{
+					"number" : 1,
+					"type" : "pick",
+					"content" : "<p>Quel est le pr&eacute;nom du h&eacute;ros poilu de Ratatouille ?</p>",
+					"proposals" : ["Kevin","Remy","Robert","Sylvestre"],
+					"solutions" : ["Remy"]
+				},
+				{
+					"number" : 2,
+					"type" : "type",
+					"content" : "<p>Qui chantait \"Comme un ouragan\" ?</p>",
+					"proposals" : [],
+					"solutions" : ["St&eacute;phanie de Monaco"]
+				}
+			]
+		}
+	]
+}
