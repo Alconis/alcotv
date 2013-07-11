@@ -3,15 +3,15 @@
 
 	tv.controller(
 		'WelcomeCtrl',
-		['$scope', 'angularFireCollection', function($scope, angularFireCollection){
+		['$scope', 'angularFire', function($scope, angularFire){
 		
 			$scope.$watch('games', function(newValue, oldValue){
-				var v = newValue;
+				if(newValue && newValue.length > 0)
+					$scope.theGame = newValue[0];
 			});
 		
-			var fbUrl = "https://alcotv.firebaseio.com";
-			var fb = new Firebase(fbUrl);
-			$scope.games = angularFireCollection(fb);
+			var fbUrl = "https://alcotv.firebaseio.com/games";
+			var promise = new angularFire(fbUrl, $scope, 'games', []);
 		}]);
 
 })(angular, alcotv);
