@@ -1,0 +1,40 @@
+<div ng-show="theGame">
+
+	<h1>{{theGame.parameters.title}}</h1>
+
+	<div ng-show="theGame.parameters.status.status == 'waiting_for_players'">
+		La partie va bient&ocirc;t commencer !
+	</div>
+
+	<div ng-show="theQuestion">
+		<h2>Question n°{{theQuestionID + 1}}</h2>
+
+		<div>
+			{{theQuestion.content}}
+		</div>
+	</div>
+
+	<!-- Liste des joueurs connectés -->
+	<div>
+		<p>Joueurs connectés :</p>
+		<div ng-show="theGame.players.length > 0">
+			<ol>
+				<li ng-repeat="player in theGame.players | orderBy:'score'">
+					{{player.name}} ({{player.status}}) | {{player.score}}
+				</li>
+			</ol>
+		</div>
+		<div ng-show="theGame.players == undefined || theGame.players.length == 0">
+			Aucun joueur connecté.
+		</div>
+
+		<div ng-show="theGame.parameters.presenter != ''">
+			Le présentateur est {{theGame.parameters.presenter}}.
+		</div>
+		<div ng-hide="theGame.parameters.presenter != ''">
+			Aucun présentateur pour le moment.
+		</div>
+	</div>
+
+
+</div>

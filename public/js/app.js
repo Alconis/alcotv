@@ -18,20 +18,30 @@ var alcotv = angular.module('alcotv', ['firebase', 'ui.bootstrap'])
 		$scope.theGameID = 0;
 
 		// The game being played
-		$scope.theGame;
+		$scope.theGame = null;
 
 		// The current player
-		$scope.thePlayer = undefined;
+		$scope.thePlayer = null;
 
 		// When connected, the index of the current player
 		// in the Array of players.
 		$scope.thePlayerID = -1;
 
-		// true if the current player is presenter
+		// The current question being asked
+		$scope.theQuestion = null;
+
+		// The index of the current question
+		$scope.theQuestionID = -1;
+
+		// true if the current user is a player
+		$scope.isPlayer = false;
+
+		// true if the current user is presenter
 		$scope.isPresenter = false;
 
 		// true if we are the TV
 		$scope.isTV = false;
+
 
 		/*
 		 * Retrieve the game from firebase
@@ -42,12 +52,22 @@ var alcotv = angular.module('alcotv', ['firebase', 'ui.bootstrap'])
 		var promise = new angularFire(fbUrl, $scope, 'theGame', {});
 		promise.then(
 			function success(){
-				$scope.working = undefined;
+				$scope.working = null;
 			},
 			function error(){
 				$scope.working = "Unable to retrieve games."
 			});
 
-		
+		/*$scope.$watch('isPlayer', function(newValue, oldValue){
+			$scope.isPresenter = $scope.isTV = !newValue;
+		});
+
+		$scope.$watch('isPresenter', function(newValue, oldValue){
+			$scope.isPlayer = $scope.isTV = !newValue;
+		});
+
+		$scope.$watch('isTV', function(newValue, oldValue){
+			$scope.isPlayer = $scope.isPresenter = !newValue;
+		});*/
 
 	}]);

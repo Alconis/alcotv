@@ -1,27 +1,38 @@
-<div ng-show="theGame != undefined">
+<div ng-show="theGame">
 
 	<h1>{{theGame.parameters.title}}</h1>
 
-	<div ng-show="thePlayer == undefined">
+	<div ng-show="thePlayer == null">
 		<p>Entrez votre nom :</p>
 		<input type="text" placeholder="Nouveau joueur" ng-model="thePlayerName"></input>
 
 		<p>Rejoindre en tant que :</p>
 		<div>
-			<button class="btn btn-primary" ng-disabled="thePlayerName == ''" ng-click="enterAsPlayer()"><i class="icon icon-user"></i> Joueur</button>
-			<button class="btn" ng-disabled="theGame.parameters.presenter == '' && thePlayerName == ''" ng-click="enterAsPresenter()"><i class="icon icon-comment"></i> Présentateur</button>
+			<button class="btn btn-primary"
+					ng-disabled="thePlayerName == ''"
+					ng-click="enterAsPlayer()">
+						<i class="icon icon-user"></i> Joueur
+			</button>
+			<button class="btn"
+					ng-show="theGame.parameters.presenter == ''"
+					ng-disabled="thePlayerName == ''"
+					ng-click="enterAsPresenter()">
+						<i class="icon icon-comment"></i> Présentateur
+			</button>
 			<button class="btn" ng-click="enterAsTV()"><i class="icon icon-play"></i> TV</button>
 		</div>
 	</div>
 
 	<div ng-show="theGame.players.length > 0">
-		<p>{{theGame.players.length}} joueurs sont prêts :</p>
+		<p>Joueurs connectés :</p>
 		<ul>
 			<li ng-repeat="player in theGame.players">
-				{{player.name}} <a href="" ng-show="player.name == thePlayer.name" ng-click="leave()">Quitter</a>
+				<span ng-show="player.name == thePlayer.name">&gt;</span> {{player.name}} <button class="btn btn-small" ng-show="player.name == thePlayer.name" ng-click="leave()"><i class="icon icon-remove-circle"></i></button>
 			</li>
 		</ul>
-		<p>You are {{thePlayer.name}}</p>
+	</div>
+	<div ng-show="theGame.players == undefined || theGame.players.length == 0">
+		Aucun joueur connecté.
 	</div>
 
 	<div ng-show="isPresenter">
@@ -30,6 +41,6 @@
 
 </div>
 
-<div ng-hide="theGame != undefined">
+<div ng-hide="theGame">
 	<h1>Aucune partie accessible</h1>
 </div>

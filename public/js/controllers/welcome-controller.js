@@ -3,7 +3,7 @@
 
 	tv.controller(
 		'WelcomeCtrl',
-		['$scope', 'angularFire', function($scope, angularFire){
+		['$scope', '$location', 'angularFire', function($scope, $location, angularFire){
 
 			$scope.thePlayerName = '';
 
@@ -20,16 +20,19 @@
 						return;
 					}
 				});
+
+				// Create new player object.
 				var newPlayer = {
 					name : $scope.thePlayerName,
 					status : 'ready',
 					score : 0
 				}
-				$scope.thePlayerID = $scope.theGame.players.push(newPlayer);
+				$scope.thePlayerID = $scope.theGame.players.push(newPlayer) - 1;
+				$scope.isPlayer = true;
 				$scope.isPresenter = false;
 				$scope.isTV = false;
 
-				// Sync the player with firebase
+				// Sync the $scope.thePlayer with firebase
 				var fbUrl = "https://alcotv.firebaseio.com/games/"
 				 				+ $scope.theGameID + "/players/"
 				 				+ $scope.thePlayerID;
@@ -37,7 +40,8 @@
 			};
 
 			$scope.enterAsPresenter = function() {
-				$scope.theGame.parameters.presenter = $scope.thePlayer.name;
+				$scope.theGame.parameters.presenter = $scope.thePlayer = $scope.thePlayerName;
+				$scope.isPlayer = false;
 				$scope.isPresenter = true;
 				$scope.isTV = false;
 
@@ -51,11 +55,28 @@
 			};
 
 			$scope.enterAsTV = function() {
+				$scope.isPlayer = false;
 				$scope.isPresenter = false;
 				$scope.isTV = true;
+
+				$location.path("/tv");
 			};
 
-
+			$scope.leave = function() {
+				if($scope.isPlayer){
+					ng.forEach($scope.theGame.players, function(value, key){
+						if(value.name == $scope.thePlayer.name){
+							$scope.theGame.players.splice(value, 1);
+							return;
+						}
+					});
+					$scope.thePlayerID = -1;
+					$scope.thePlayer = null;
+				$scope.isPlayer = false;
+				$scope.isPresenter = false;
+				$scope.isTV = false;
+				}
+			}
 		}]);
 
 })(angular, alcotv);
