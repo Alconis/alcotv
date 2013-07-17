@@ -2,11 +2,41 @@
 	"games" : [
 		{
 			"parameters" : {
-				"title" : "Titre de la partie",
+				"title" : "Alco Test",
+				"status" : {
+					"status" : "waiting_for_players",
+					"current_question" : 0
+				},
+				"presenter" : ""
+			},
+			
+			"players" : [],
+			
+			"questions" : [
+				{
+					"number" : 1,
+					"type" : "pick",
+					"content" : "<p>Quel est le pr&eacute;nom du h&eacute;ros poilu de Ratatouille ?</p>",
+					"proposals" : ["Kevin","Remy","Robert","Sylvestre"],
+					"solutions" : ["Remy"]
+				},
+				{
+					"number" : 2,
+					"type" : "type",
+					"content" : "<p>Qui chantait \"Comme un ouragan\" ?</p>",
+					"proposals" : [],
+					"solutions" : ["St&eacute;phanie de Monaco"]
+				}
+			]
+		},
+		{
+			"parameters" : {
+				"title" : "Partie en cours",
 				"status" : {
 					"status" : "asking",
 					"current_question" : 2
-				}
+				},
+				"presenter" : false
 			},
 			
 			"players" : [

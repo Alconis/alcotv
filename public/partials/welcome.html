@@ -1,5 +1,35 @@
-<h1>Parties disponibles</h1>
+<div ng-show="theGame != undefined">
 
-<ul>
-	<li>{{theGame.parameters.title}}</li>
-</ul>
+	<h1>{{theGame.parameters.title}}</h1>
+
+	<div ng-show="thePlayer == undefined">
+		<p>Entrez votre nom :</p>
+		<input type="text" placeholder="Nouveau joueur" ng-model="thePlayerName"></input>
+
+		<p>Rejoindre en tant que :</p>
+		<div>
+			<button class="btn btn-primary" ng-disabled="thePlayerName == ''" ng-click="enterAsPlayer()"><i class="icon icon-user"></i> Joueur</button>
+			<button class="btn" ng-disabled="theGame.parameters.presenter == '' && thePlayerName == ''" ng-click="enterAsPresenter()"><i class="icon icon-comment"></i> Présentateur</button>
+			<button class="btn" ng-click="enterAsTV()"><i class="icon icon-play"></i> TV</button>
+		</div>
+	</div>
+
+	<div ng-show="theGame.players.length > 0">
+		<p>{{theGame.players.length}} joueurs sont prêts :</p>
+		<ul>
+			<li ng-repeat="player in theGame.players">
+				{{player.name}} <a href="" ng-show="player.name == thePlayer.name" ng-click="leave()">Quitter</a>
+			</li>
+		</ul>
+		<p>You are {{thePlayer.name}}</p>
+	</div>
+
+	<div ng-show="isPresenter">
+		<button class="btn btn-large btn-primary"><i class="icon icon-chevron-right"></i> Démarrer la partie</button>
+	</div>
+
+</div>
+
+<div ng-hide="theGame != undefined">
+	<h1>Aucune partie accessible</h1>
+</div>
