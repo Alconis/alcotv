@@ -1,6 +1,6 @@
 'use strict';
 
-var alcotv = angular.module('alcotv', ['firebase', 'ui.bootstrap'])
+var alcotv = angular.module('alcotv', ['ngSanitize', 'firebase', 'ui.bootstrap'])
 	.config(function($routeProvider) {
 		$routeProvider.
 			when('/', {controller:'WelcomeCtrl', templateUrl:'partials/welcome.html'}).
@@ -9,7 +9,7 @@ var alcotv = angular.module('alcotv', ['firebase', 'ui.bootstrap'])
 			when('/player/:playerName', {controller:'PlayerCtrl', templateUrl:'partials/player.html'}).
 			otherwise({redirectTo:'/'});
 		})
-	.controller('MainCtrl', ['$scope', 'angularFire', function($scope, angularFire){
+	.controller('MainCtrl', ['$scope', '$location', 'angularFire', function($scope, $location, angularFire){
 		/*
 		 * GLOBAL SCOPE VARIABLES
 		 */
@@ -31,7 +31,7 @@ var alcotv = angular.module('alcotv', ['firebase', 'ui.bootstrap'])
 		$scope.theQuestion = null;
 
 		// The index of the current question
-		$scope.theQuestionID = -1;
+		$scope.theQuestionID = 0;
 
 		// true if the current user is a player
 		$scope.isPlayer = false;
@@ -41,7 +41,6 @@ var alcotv = angular.module('alcotv', ['firebase', 'ui.bootstrap'])
 
 		// true if we are the TV
 		$scope.isTV = false;
-
 
 		/*
 		 * Retrieve the game from firebase
@@ -57,17 +56,47 @@ var alcotv = angular.module('alcotv', ['firebase', 'ui.bootstrap'])
 			function error(){
 				$scope.working = "Unable to retrieve games."
 			});
-
-		/*$scope.$watch('isPlayer', function(newValue, oldValue){
-			$scope.isPresenter = $scope.isTV = !newValue;
+			
+		$scope.$watch('theGame.parameters.status.current_question', function(newValue, oldValue){
+			if(!$scope.theGame) return;
+			
+			if(newValue > -1){
+				$scope.theQuestionID = newValue;
+				$scope.theQuestion = $scope.theGame.questions[$scope.theQuestionID];
+				
+				if($scope.isPlayer){
+					$location.path("/player/" + $scope.thePlayerID);
+				}
+				
+				if($scope.isPresenter){
+					$location.path("/presenter");
+				}
+			}else{
+				$scope.theQuestionID = -1;
+				$scope.theQuestion = null;
+				$location.path("/");
+			}
 		});
-
-		$scope.$watch('isPresenter', function(newValue, oldValue){
-			$scope.isPlayer = $scope.isTV = !newValue;
+		
+		$scope.$on('changeRole', function(event, newRole, newID){
+			if(newRole == 'presenter'){
+				$scope.isPresenter = true;
+				$scope.isPlayer = false;
+				$scope.isTV = false;
+			}
+			if(newRole == 'player'){
+				$scope.thePlayerID = newID;
+				$scope.isPresenter = false;
+				$scope.isPlayer = true;
+				$scope.isTV = false;
+			}
+			if(newRole == 'tv'){
+				$scope.isPresenter = false;
+				$scope.isPlayer = false;
+				$scope.isTV = true;
+				
+				$location.path("/tv");
+			}
 		});
-
-		$scope.$watch('isTV', function(newValue, oldValue){
-			$scope.isPlayer = $scope.isPresenter = !newValue;
-		});*/
 
 	}]);

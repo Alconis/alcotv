@@ -27,23 +27,19 @@
 					status : 'ready',
 					score : 0
 				}
-				$scope.thePlayerID = $scope.theGame.players.push(newPlayer) - 1;
-				$scope.isPlayer = true;
-				$scope.isPresenter = false;
-				$scope.isTV = false;
+				var thePlayerID = $scope.theGame.players.push(newPlayer) - 1;
+				$scope.$emit('changeRole', 'player', thePlayerID);
 
 				// Sync the $scope.thePlayer with firebase
 				var fbUrl = "https://alcotv.firebaseio.com/games/"
 				 				+ $scope.theGameID + "/players/"
-				 				+ $scope.thePlayerID;
+				 				+ thePlayerID;
 				var promise = new angularFire(fbUrl, $scope, 'thePlayer', {});
 			};
 
 			$scope.enterAsPresenter = function() {
 				$scope.theGame.parameters.presenter = $scope.thePlayer = $scope.thePlayerName;
-				$scope.isPlayer = false;
-				$scope.isPresenter = true;
-				$scope.isTV = false;
+				$scope.$emit('changeRole', 'presenter');
 
 				// If existing player name
 				ng.forEach($scope.theGame.players, function(value, key){
@@ -55,13 +51,16 @@
 			};
 
 			$scope.enterAsTV = function() {
-				$scope.isPlayer = false;
-				$scope.isPresenter = false;
-				$scope.isTV = true;
-
-				$location.path("/tv");
+				$scope.$emit('changeRole', 'tv');
 			};
 
+			$scope.startGame = function() {
+				$scope.theGame.parameters.status = {
+					status : 'asking',
+					current_question : 0
+				};
+			}
+			
 			$scope.leave = function() {
 				if($scope.isPlayer){
 					ng.forEach($scope.theGame.players, function(value, key){
@@ -72,9 +71,9 @@
 					});
 					$scope.thePlayerID = -1;
 					$scope.thePlayer = null;
-				$scope.isPlayer = false;
-				$scope.isPresenter = false;
-				$scope.isTV = false;
+					$scope.isPlayer = false;
+					$scope.isPresenter = false;
+					$scope.isTV = false;
 				}
 			}
 		}]);

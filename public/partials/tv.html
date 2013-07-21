@@ -9,8 +9,7 @@
 	<div ng-show="theQuestion">
 		<h2>Question n°{{theQuestionID + 1}}</h2>
 
-		<div>
-			{{theQuestion.content}}
+		<div ng-bind-html="theQuestion.content">
 		</div>
 	</div>
 
